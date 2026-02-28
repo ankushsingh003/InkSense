@@ -1,0 +1,174 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.5.0 -- D:\anaconda\python.exe
+cachedir: .pytest_cache
+rootdir: D:\ink_detection_fragments
+plugins: anyio-4.12.1, langsmith-0.4.43
+collecting ... collected 3 items
+
+pytest : Windows fatal 
+exception: access violation
+At line:1 char:1
++ pytest -v d:\ink_detection_fr
+agments\tests\test_core.py > 
+test_result ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo          :  
+   NotSpecified: (Windows fat  
+  al e...ccess violation:Str   
+ ing) [], RemoteException
+    + FullyQualifiedErrorId :  
+   NativeCommandError
+ 
+
+Current thread 0x000024e0 
+(most recent call first):
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\conv.py
+", line 718 in _conv_forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\conv.py
+", line 723 in forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1787 in _call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1776 in 
+_wrapped_call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\contain
+er.py", line 253 in forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1787 in _call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1776 in 
+_wrapped_call_impl
+  File "d:\ink_detection_fragme
+nts\model.py", line 23 in 
+forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1787 in _call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1776 in 
+_wrapped_call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\contain
+er.py", line 253 in forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1787 in _call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1776 in 
+_wrapped_call_impl
+  File "d:\ink_detection_fragme
+nts\model.py", line 62 in 
+forward
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1787 in _call_impl
+  File "D:\anaconda\Lib\site-pa
+ckages\torch\nn\modules\module.
+py", line 1776 in 
+_wrapped_call_impl
+  File "d:\ink_detection_fragme
+nts\tests\test_core.py", line 
+22 in test_model_output_shape
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\python.py", 
+line 159 in pytest_pyfunc_call
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_callers.py", 
+line 103 in _multicall
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_manager.py", 
+line 120 in _hookexec
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_hooks.py", line 
+513 in __call__
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\python.py", 
+line 1627 in runtest
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 174 in pytest_runtest_call
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_callers.py", 
+line 103 in _multicall
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_manager.py", 
+line 120 in _hookexec
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_hooks.py", line 
+513 in __call__
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 242 in <lambda>
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 341 in from_call
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 241 in call_and_report
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 132 in runtestprotocol
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\runner.py", 
+line 113 in 
+pytest_runtest_protocol
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_callers.py", 
+line 103 in _multicall
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_manager.py", 
+line 120 in _hookexec
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_hooks.py", line 
+513 in __call__
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\main.py", line 
+362 in pytest_runtestloop
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_callers.py", 
+line 103 in _multicall
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_manager.py", 
+line 120 in _hookexec
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_hooks.py", line 
+513 in __call__
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\main.py", line 
+337 in _main
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\main.py", line 
+283 in wrap_session
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\main.py", line 
+330 in pytest_cmdline_main
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_callers.py", 
+line 103 in _multicall
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_manager.py", 
+line 120 in _hookexec
+  File "D:\anaconda\Lib\site-pa
+ckages\pluggy\_hooks.py", line 
+513 in __call__
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\config\__init__.
+py", line 175 in main
+  File "D:\anaconda\Lib\site-pa
+ckages\_pytest\config\__init__.
+py", line 201 in console_main
+  File "D:\anaconda\Scripts\pyt
+est-script.py", line 10 in 
+<module>
+tests/test_core.py::test_model_output_shape 

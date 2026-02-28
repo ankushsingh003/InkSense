@@ -28,10 +28,23 @@ def create_presentation_plot(original_ir, prediction, denoised, output_path="pre
     print(f"Presentation visualization saved to {output_path}")
 
 if __name__ == "__main__":
-    # Simulate a demo for now
-    dummy_ir = np.random.rand(512, 512)
-    dummy_pred = np.random.rand(512, 512)
-    dummy_denoised = (dummy_pred > 0.5).astype(float)
+    import os
+    # Load real data for verification
+    data_dir = "d:/ink_detection_fragments/processed"
+    lbl_path = os.path.join(data_dir, "fragment1_labels.npy")
     
-    os.makedirs("results", exist_ok=True)
-    create_presentation_plot(dummy_ir, dummy_pred, dummy_denoised, "results/demo_impact.png")
+    if os.path.exists(lbl_path):
+        # Using a small slice for demo
+        dummy_ir = np.load(lbl_path, mmap_mode='r')[:512, :512].astype(float) / 255.0
+        dummy_pred = np.clip(dummy_ir + np.random.normal(0, 0.2, dummy_ir.shape), 0, 1)
+        dummy_denoised = (dummy_pred > 0.5).astype(float)
+        
+        os.makedirs("results", exist_ok=True)
+        create_presentation_plot(dummy_ir, dummy_pred, dummy_denoised, "results/demo_impact.png")
+    else:
+        # Fallback to dummy
+        dummy_ir = np.random.rand(512, 512)
+        dummy_pred = np.random.rand(512, 512)
+        dummy_denoised = (dummy_pred > 0.5).astype(float)
+        os.makedirs("results", exist_ok=True)
+        create_presentation_plot(dummy_ir, dummy_pred, dummy_denoised, "results/demo_impact.png")

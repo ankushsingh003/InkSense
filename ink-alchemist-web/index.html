@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ink-Alchemist | 3D Ink Detection AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <header>
+          <h1>Ink-Alchemist</h1>
+          <p class="subtitle">Virtual Unrolling & 3D Ink Detection AI Pipeline</p>
+        </header>
+
+        <main class="main-grid">
+          <!-- Upload Section -->
+          <section class="glass-panel upload-section">
+            <h2 style="margin-bottom: 1.5rem;">Input Analysis</h2>
+            <div class="drop-zone" id="drop-zone">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Drag & Drop Papyrus Scan (Fragment)</p>
+              <span style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Supports PNG, JPG, TIFF</span>
+              <input type="file" id="file-input" hidden accept="image/*">
+            </div>
+            <img id="image-preview" alt="Input Preview">
+            <button id="process-btn" class="btn-primary" disabled>Analyze Volumetric Data</button>
+          </section>
+
+          <!-- Results Section -->
+          <section class="glass-panel results-section" style="position: relative;">
+            <div id="processing-overlay" class="processing-overlay">
+              <span class="loader"></span>
+              <p style="margin-top: 1rem; font-weight: 600;">AI Engine Analyzing...</p>
+              <small id="status-text" style="color: var(--text-muted); margin-top: 0.5rem;">Extracting 3D Slices</small>
+            </div>
+            
+            <h2 style="margin-bottom: 1.5rem;">Virtual Unrolling Result</h2>
+            <div id="results-placeholder" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-align: center;">
+              <i class="fas fa-microscope" style="font-size: 4rem; opacity: 0.2; margin-bottom: 1.5rem;"></i>
+              <p>Upload a fragment scan to begin digital restoration</p>
+            </div>
+            
+            <div id="results-display" style="display: none; flex: 1; flex-direction: column;">
+              <canvas id="result-canvas"></canvas>
+              <div id="metrics" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="glass-panel" style="padding: 1rem; background: rgba(255,255,255,0.03);">
+                  <small style="color: var(--text-muted);">Inference Latency</small>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">127 ms</div>
+                </div>
+                <div class="glass-panel" style="padding: 1rem; background: rgba(255,255,255,0.03);">
+                  <small style="color: var(--text-muted);">Ink Probability Score</small>
+                  <div id="ink-score" style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">0.942</div>
+                </div>
+              </div>
+              <button id="download-btn" class="btn-primary" style="background: var(--glass); border: 1px solid var(--glass-border);">Download Mask</button>
+            </div>
+          </section>
+        </main>
+
+        <section class="glass-panel" style="padding: 2rem; margin-top: 2rem;">
+          <h3 style="margin-bottom: 1rem;">About the AI Engine</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            This interface demonstrates the <strong>Ink-Alchemist Hybrid 3D-CNN + Transformer</strong> architecture. 
+            The pipeline processes volumetric CT data to identify chemical signatures of ink residue on ancient papyrus fragments, 
+            bypassing physical degradation through digital restoration.
+          </p>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

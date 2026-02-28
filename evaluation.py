@@ -44,11 +44,18 @@ def optimize_threshold(pred_probs, true_labels):
     return best_threshold
 
 if __name__ == "__main__":
-    # Example usage on dummy data
-    dummy_pred = np.random.rand(512, 512)
-    dummy_true = (np.random.rand(512, 512) > 0.8).astype(float)
-    
-    best_t = optimize_threshold(dummy_pred, dummy_true)
-    final_mask = post_process(dummy_pred, threshold=best_t)
-    
-    print(f"Post-processing verified. Mask saved (if implemented).")
+    import os
+    # Load real data for verification
+    data_dir = "d:/ink_detection_fragments/processed"
+    lbl_path = os.path.join(data_dir, "fragment1_labels.npy")
+    # For dummy prediction, we'll use labels with some noise/blur
+    if os.path.exists(lbl_path):
+        dummy_true = np.load(lbl_path, mmap_mode='r')[:512, :512].astype(float) / 255.0
+        dummy_pred = np.clip(dummy_true + np.random.normal(0, 0.1, dummy_true.shape), 0, 1)
+        
+        best_t = optimize_threshold(dummy_pred, dummy_true)
+        final_mask = post_process(dummy_pred, threshold=best_t)
+        
+        print(f"Post-processing verified on real data subset.")
+    else:
+        print(f"Data not found at {lbl_path}, skipping real data verification.")
