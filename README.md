@@ -197,6 +197,21 @@ InkSense/
 
 ---
 
+## 🚀 Deployment (Render)
+
+To deploy this project on Render:
+
+1. **Push to GitHub**: Ensure all changes are pushed to your repository (`github.com/ankushsingh003/Ink-Alchemist`).
+2. **Create Web Service**: In Render, click "New" -> "Web Service".
+3. **Connect Repo**: Connect your GitHub repository.
+4. **Configuration**:
+   - **Environment**: `Docker`
+   - **Plan**: Any plan (the optimized image is lightweight).
+5. **Environment Variables**: Render automatically sets the `PORT` variable.
+6. **Deploy**: Click "Create Web Service".
+
+---
+
 <div align="center">
 
 Made with ❤️ for the Vesuvius Challenge · **InkSense** © 2025

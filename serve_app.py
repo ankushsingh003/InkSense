@@ -3,7 +3,7 @@ import socketserver
 import os
 import sys
 
-PORT = 3000
+PORT = int(os.environ.get("PORT", 3000))
 DIRECTORY = "ink-alchemist-web/dist"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
