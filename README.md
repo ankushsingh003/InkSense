@@ -21,7 +21,7 @@
 
 ## 📜 Overview
 
-**InkSense** is an industry-grade AI pipeline built for the **Vesuvius Challenge** — the quest to digitally read thousands of carbonized Greek scrolls buried by Mount Vesuvius in 79 AD.
+**InkSense** is an industry-grade AI pipeline — the quest to digitally read thousands of carbonized Greek scrolls buried by Mount Vesuvius in 79 AD.
 
 The pipeline uses a **Hybrid 3D-CNN + Transformer** model to detect the chemical signature of ink residue inside 3D X-ray CT volumes, without physically unrolling or damaging the fragile scrolls. Results are served through a premium web interface that shows ink coverage, heatmaps, and region analysis in real-time.
 
@@ -214,6 +214,6 @@ To deploy this project on Render:
 
 <div align="center">
 
-Made with ❤️ for the Vesuvius Challenge · **InkSense** © 2025
+Made with ❤️ · **InkSense** © 2025
 
 </div>
