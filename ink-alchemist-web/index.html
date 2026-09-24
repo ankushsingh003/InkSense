@@ -3,18 +3,16 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- UTIF.js: lightweight TIFF/TIF decoder -->
   <script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InkSense | Ink Segmentation Research Demo</title>
+  <title>InkSense :: Carbonised Ink Detection in CT Volumes</title>
   <meta name="description"
-    content="InkSense uses advanced computer vision to detect, quantify and map ink distribution in any image with industry-leading precision." />
+    content="InkSense segments carbonised ink in X-ray CT scans of papyrus fragments using a 3D-CNN + Transformer trained in PyTorch. Research demo — client-side heuristic preview." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,500;0,600;1,400&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 
@@ -24,289 +22,349 @@
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="#" class="nav-brand">
-        <div class="brand-icon">
-          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 4C18 4 8 14.5 8 22C8 27.5 12.5 32 18 32s10-4.5 10-10C28 14.5 18 4 18 4Z"
-              fill="url(#inkGrad)" />
-            <circle cx="18" cy="22" r="3.5" fill="white" fill-opacity="0.3" />
-            <line x1="18" y1="14" x2="18" y2="30" stroke="white" stroke-opacity="0.5" stroke-width="1" />
-            <line x1="10" y1="22" x2="26" y2="22" stroke="white" stroke-opacity="0.5" stroke-width="1" />
-            <defs>
-              <linearGradient id="inkGrad" x1="8" y1="4" x2="28" y2="32" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#818cf8" />
-                <stop offset="1" stop-color="#6366f1" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <span>Ink<strong>Sense</strong></span>
+        <span class="brand-mono">InkSense</span>
+        <span class="brand-sep">::</span>
+        <span class="brand-sub">Carbonised Ink Detection</span>
       </a>
       <ul class="nav-links">
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#analyzer">Analyzer</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#analyzer" class="btn-nav">Try Preview</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#pipeline">Pipeline</a></li>
+        <li><a href="#analyzer">Try Demo</a></li>
+        <li><a href="https://github.com/ankushsingh003/InkSense" target="_blank" class="nav-github">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a></li>
       </ul>
-      <button class="nav-toggle" id="nav-toggle"><i class="fas fa-bars"></i></button>
+      <button class="nav-toggle" id="nav-toggle">&#9776;</button>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg-orbs">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-    <div class="container hero-content">
-      <div class="hero-badge"><i class="fas fa-circle-check"></i> Research Demo · Client-Side Preview</div>
-      <h1>Detect, Quantify &amp; Map<br /><span class="gradient-text">Ink In Any Image</span></h1>
-      <p class="hero-sub">Upload an image to get a quick, in-browser ink-strength preview: coverage percentage and highlighted
-        regions. This page uses a lightweight pixel heuristic; the trained 3D-CNN + Transformer segmentation model
-        runs offline in the Python pipeline of this repository.</p>
-      <div class="hero-cta">
-        <a href="#analyzer" class="btn-primary btn-lg"><i class="fas fa-flask"></i> Try the Preview</a>
-        <a href="#how-it-works" class="btn-ghost">See How It Works <i class="fas fa-arrow-right"></i></a>
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-label">[ RESEARCH DEMO &nbsp;&bull;&nbsp; CLIENT-SIDE PREVIEW ]</div>
+      <h1>Segmenting Carbonised Ink<br /><em>in High-Resolution CT Volumes</em></h1>
+      <p class="hero-desc">
+        A 3D-CNN + Transformer model trained in PyTorch detects ink that is invisible in any single CT slice — 
+        by learning from a 32-slice stack of surface-volume scans. This page shows a lightweight 
+        <strong>browser-side heuristic preview</strong> (luminance + saturation scoring). 
+        The trained model runs offline via <code>train.py</code> / <code>evaluation.py</code>.
+      </p>
+      <div class="hero-actions">
+        <a href="#analyzer" class="btn-primary">Run Preview</a>
+        <a href="#pipeline" class="btn-link">See Pipeline &rarr;</a>
       </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">0 bytes</span>
-          <span class="stat-label">Uploaded to a server</span>
+      <div class="hero-meta-row">
+        <div class="meta-item">
+          <span class="meta-key">Architecture</span>
+          <span class="meta-val">3D ResNet + Transformer</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">PNG · JPG · TIF</span>
-          <span class="stat-label">Supported formats</span>
+        <div class="meta-item">
+          <span class="meta-key">Tile Size</span>
+          <span class="meta-val">256 &times; 256 px</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">256×256</span>
-          <span class="stat-label">Training tile size (offline model)</span>
+        <div class="meta-item">
+          <span class="meta-key">CT Slices</span>
+          <span class="meta-val">32 per tile (Z-axis)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Loss</span>
+          <span class="meta-val">BCE + Soft Dice</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Metric</span>
+          <span class="meta-val">F0.5 (precision-weighted)</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section class="how-it-works" id="how-it-works">
+  <!-- About -->
+  <section class="section-about" id="about">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Process</span>
-        <h2>How InkSense Works</h2>
-        <p>Three steps. Everything in this preview runs in your browser.</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <div class="step-icon"><i class="fas fa-upload"></i></div>
-          <h3>Upload Image</h3>
-          <p>Drag and drop any image — document scans, papyrus fragments, printed materials, or product surfaces.</p>
-        </div>
-        <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <div class="step-icon"><i class="fas fa-brain"></i></div>
-          <h3>Pixel Analysis</h3>
-          <p>A luminance/saturation heuristic scores each pixel and groups ink pixels into connected regions. This is a preview,
-            not the trained model (see the repository README for the model and its measured results).
+      <div class="two-col">
+        <div class="col-text">
+          <h2>What is this?</h2>
+          <p>
+            InkSense is a research pipeline for the <strong>Vesuvius Challenge</strong> ink-detection task — 
+            segmenting the traces of carbonised ink left on papyrus scrolls from Herculaneum, buried by the 
+            eruption of Mount Vesuvius in 79 AD. X-ray micro-CT scans reveal surface topology but ink is 
+            nearly invisible by reflectance; only subtle density differences in the CT volume betray its presence.
           </p>
+          <p>
+            The model processes 32 consecutive CT slices per tile, building a volumetric understanding before 
+            projecting down to a 2D ink-probability mask. Self-attention runs on <strong>1,024 tokens per tile</strong> 
+            (8&times; spatial downsampling) rather than 65,536 pixels, keeping memory manageable on a consumer GPU.
+          </p>
+          <div class="callout">
+            <span class="callout-label">Note</span>
+            <p>This browser demo does <em>not</em> run the trained model. It uses a pixel-luminance heuristic 
+            to produce a fast, approximate preview. All quantitative results come from the offline Python pipeline.</p>
+          </div>
         </div>
-        <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <div class="step-icon"><i class="fas fa-chart-area"></i></div>
-          <h3>Results & Report</h3>
-          <p>Get a heatmap overlay, ink coverage %, region-by-region breakdown, and a downloadable analysis report.</p>
+        <div class="col-code">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-file">model.py</span>
+              <span class="code-lang">Python</span>
+            </div>
+            <pre><code><span class="c"># 3D Encoder → Transformer → 2D Decoder</span>
+<span class="k">class</span> <span class="n">VesuviusModel</span>(nn.Module):
+    <span class="k">def</span> __init__(self, z_dim=<span class="l">32</span>,
+                 model_dim=<span class="l">128</span>, nhead=<span class="l">8</span>):
+        <span class="c"># Stem: Conv3d, stride (1,2,2)</span>
+        <span class="c"># Encoder: 2× BasicBlock3D</span>
+        <span class="c"># Neck: fold Z into channels</span>
+        <span class="c"># Transformer: 2 encoder layers</span>
+        <span class="c"># Decoder: 3× upsample + skip</span>
+        ...
+
+    <span class="k">def</span> forward(self, x):  <span class="c"># (B,1,Z,H,W)</span>
+        s    = self.stem(x)       <span class="c"># H/2</span>
+        skip = self.skip_proj(
+                 s.mean(dim=<span class="l">2</span>))  <span class="c"># (B,32,H/2)</span>
+        f    = self.encoder3d(s)  <span class="c"># H/8</span>
+        f    = self.neck(f)
+        <span class="c"># attention on 1024 tokens</span>
+        tokens = self.transformer(...)
+        <span class="k">return</span> self.head(f)   <span class="c"># (B,1,H,W)</span></code></pre>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Analyzer Tool -->
-  <section class="analyzer-section" id="analyzer">
+  <!-- Pipeline -->
+  <section class="section-pipeline" id="pipeline">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Live Tool</span>
-        <h2>Ink Detection Analyzer</h2>
-        <p>Upload your image and get a complete ink analysis in seconds.</p>
+      <h2>Pipeline</h2>
+      <p class="section-intro">End-to-end from raw TIFF slices to evaluated metrics.</p>
+      <div class="pipeline-steps">
+        <div class="pipe-step">
+          <div class="pipe-num">01</div>
+          <div class="pipe-body">
+            <h3>Preprocess</h3>
+            <p>16-bit TIFF slices scaled to uint8 and written to a memory-mapped <code>.npy</code> file. 
+            RAM stays at one slice; a 1.7 GB volume (Fragment 1) streams safely on any machine.</p>
+            <code class="cmd">python data_preprocessing.py --fragment 1</code>
+          </div>
+        </div>
+        <div class="pipe-arrow">&darr;</div>
+        <div class="pipe-step">
+          <div class="pipe-num">02</div>
+          <div class="pipe-body">
+            <h3>Spatial Split</h3>
+            <p>Bottom 20% of each fragment is held out as the validation band. 
+            Train tiles must end above this boundary — zero pixel overlap guaranteed by a unit test.</p>
+          </div>
+        </div>
+        <div class="pipe-arrow">&darr;</div>
+        <div class="pipe-step">
+          <div class="pipe-num">03</div>
+          <div class="pipe-body">
+            <h3>Train</h3>
+            <p>AdamW + cosine schedule, mixed precision (AMP), gradient norm clipping. 
+            Best checkpoint selected by validation F0.5. Optional W&amp;B logging.</p>
+            <code class="cmd">python train.py --train_fragments 1 --epochs 30</code>
+          </div>
+        </div>
+        <div class="pipe-arrow">&darr;</div>
+        <div class="pipe-step">
+          <div class="pipe-num">04</div>
+          <div class="pipe-body">
+            <h3>Evaluate</h3>
+            <p>Sliding-window inference (overlapping tiles, averaged), threshold sweep on validation band, 
+            morphological open/close denoising. Outputs <code>metrics.json</code>.</p>
+            <code class="cmd">python evaluation.py --fragment 1 --region val</code>
+          </div>
+        </div>
+        <div class="pipe-arrow">&darr;</div>
+        <div class="pipe-step">
+          <div class="pipe-num">05</div>
+          <div class="pipe-body">
+            <h3>Visualise</h3>
+            <p>4-panel figure: IR scan, ground truth, probability map, and TP/FP/FN error overlay 
+            (green = TP, red = FP, blue = FN).</p>
+            <code class="cmd">python visualize_impact.py</code>
+          </div>
+        </div>
       </div>
 
-      <div class="analyzer-grid">
+      <!-- Metrics table -->
+      <div class="metrics-section">
+        <h3>Results Table <span class="table-note">(fill after running evaluation.py)</span></h3>
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Setting</th>
+              <th>F0.5 &uarr;</th>
+              <th>Dice &uarr;</th>
+              <th>Precision &uarr;</th>
+              <th>Recall &uarr;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Threshold only</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+            </tr>
+            <tr>
+              <td>+ morphological denoising</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+              <td class="val-cell">—</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="table-caption">
+          Validation = bottom 20% spatial band of Fragment 1. 
+          Best threshold is tuned on this same band (mildly optimistic); 
+          for an unbiased score, pass <code>--threshold</code> when evaluating a held-out fragment.
+        </p>
+      </div>
+    </div>
+  </section>
 
-        <!-- Upload Panel -->
-        <div class="panel glass-panel" id="upload-panel">
-          <div class="panel-header">
-            <h3><i class="fas fa-image"></i> Input Image</h3>
-            <span class="panel-badge" id="file-type-badge">No file selected</span>
+  <!-- Analyzer -->
+  <section class="section-analyzer" id="analyzer">
+    <div class="container">
+      <h2>Browser Preview <span class="beta-tag">heuristic</span></h2>
+      <p class="section-intro">
+        Upload any image — a papyrus scan, a printed document, or the example <code>image_for_eval/ir.png</code> 
+        from this repo. The browser scores each pixel by luminance + saturation. 
+        This is <em>not</em> the trained model.
+      </p>
+
+      <div class="analyzer-layout">
+
+        <!-- Input panel -->
+        <div class="analyzer-panel" id="upload-panel">
+          <div class="panel-title">
+            <span class="panel-num">INPUT</span>
+            <span class="panel-badge" id="file-type-badge">no file selected</span>
           </div>
           <div class="drop-zone" id="drop-zone">
             <div class="drop-zone-inner" id="drop-zone-inner">
-              <div class="drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-              <p class="drop-title">Drop your image here</p>
-              <p class="drop-sub">or click to browse — PNG, JPG, TIFF, BMP</p>
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                  <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-4-4-4 4M12 6v10"/>
+                </svg>
+              </div>
+              <p class="drop-title">Drop image here</p>
+              <p class="drop-sub">or click to browse &mdash; PNG &middot; JPG &middot; TIFF &middot; BMP</p>
               <input type="file" id="file-input" accept="image/*" hidden />
             </div>
             <img id="image-preview" alt="Preview" />
           </div>
-          <button class="btn-primary btn-full" id="analyze-btn" disabled>
-            <i class="fas fa-microscope"></i> Run Ink Analysis
-          </button>
-          <button class="btn-ghost btn-full" id="reset-btn" style="display:none; margin-top:0.5rem;">
-            <i class="fas fa-redo"></i> Analyze another image
-          </button>
+          <div class="panel-actions">
+            <button class="btn-primary" id="analyze-btn" disabled>Run Heuristic Analysis</button>
+            <button class="btn-link" id="reset-btn" style="display:none;">&#8635; Try another image</button>
+          </div>
         </div>
 
-        <!-- Results Panel -->
-        <div class="panel glass-panel" id="results-panel">
-          <div class="panel-header">
-            <h3><i class="fas fa-chart-bar"></i> Analysis Report</h3>
-            <span class="panel-badge" id="result-status-badge">Waiting...</span>
+        <!-- Results panel -->
+        <div class="analyzer-panel" id="results-panel">
+          <div class="panel-title">
+            <span class="panel-num">OUTPUT</span>
+            <span class="panel-badge" id="result-status-badge">waiting</span>
           </div>
 
           <!-- Placeholder -->
           <div class="results-placeholder" id="results-placeholder">
-            <i class="fas fa-water"></i>
-            <p>Upload an image to generate<br />your ink detection report.</p>
+            <div class="placeholder-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="40" height="40">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div>
+            <p>Upload an image to generate<br />the heuristic ink-detection report.</p>
           </div>
 
-          <!-- Error State -->
+          <!-- Error -->
           <div class="error-state" id="error-state" style="display:none;">
-            <div class="error-icon"><i class="fas fa-triangle-exclamation"></i></div>
-            <p class="error-title">Analysis Failed</p>
-            <p class="error-msg" id="error-msg">Unsupported image format.</p>
-            <button class="btn-ghost" id="error-reset-btn"><i class="fas fa-redo"></i> Try Another Image</button>
+            <div class="error-icon">&#9888;</div>
+            <p class="error-title">Analysis failed</p>
+            <p class="error-msg" id="error-msg">Unsupported format.</p>
+            <button class="btn-link" id="error-reset-btn">&#8635; Try another image</button>
           </div>
 
-          <!-- Processing Overlay -->
+          <!-- Processing -->
           <div class="processing-state" id="processing-state" style="display:none;">
-            <div class="scan-animation">
-              <div class="scan-ring"></div>
-              <div class="scan-ring scan-ring-2"></div>
-              <div class="scan-ring scan-ring-3"></div>
-              <i class="fas fa-eye"></i>
+            <div class="scan-lines">
+              <div class="scan-line"></div>
+              <div class="scan-line"></div>
+              <div class="scan-line"></div>
             </div>
-            <p class="processing-title">Analyzing...</p>
-            <p class="processing-step" id="processing-step">Initializing analyzer</p>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" id="progress-bar"></div>
+            <p class="processing-title">Analyzing&hellip;</p>
+            <p class="processing-step" id="processing-step">Initializing</p>
+            <div class="progress-wrap">
+              <div class="progress-fill" id="progress-bar"></div>
             </div>
           </div>
 
-          <!-- Results -->
+          <!-- Results content -->
           <div class="results-content" id="results-content" style="display:none;">
-            <!-- Heatmap Canvas -->
             <div class="canvas-wrap">
               <canvas id="result-canvas"></canvas>
               <div class="canvas-legend">
-                <span class="legend-item"><span class="legend-dot high"></span>High Ink</span>
-                <span class="legend-item"><span class="legend-dot med"></span>Medium</span>
-                <span class="legend-item"><span class="legend-dot low"></span>Low / None</span>
+                <span><span class="leg-dot high"></span> High ink</span>
+                <span><span class="leg-dot med"></span> Medium</span>
+                <span><span class="leg-dot low"></span> Trace</span>
               </div>
             </div>
 
-            <!-- Metrics Grid -->
-            <div class="metrics-grid">
-              <div class="metric-card metric-primary">
-                <div class="metric-icon"><i class="fas fa-percent"></i></div>
-                <div>
-                  <div class="metric-value" id="metric-coverage">—</div>
-                  <div class="metric-label">Ink Coverage</div>
-                </div>
+            <!-- Data table output -->
+            <table class="output-table">
+              <thead>
+                <tr><th colspan="2">Heuristic Analysis Report</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ink Coverage</td>
+                  <td class="val-cell" id="metric-coverage">—</td>
+                </tr>
+                <tr>
+                  <td>Distinct Regions</td>
+                  <td class="val-cell" id="metric-regions">—</td>
+                </tr>
+                <tr>
+                  <td>Confidence (heuristic)</td>
+                  <td class="val-cell" id="metric-confidence">—</td>
+                </tr>
+                <tr>
+                  <td>Analysis Latency</td>
+                  <td class="val-cell" id="metric-latency">—</td>
+                </tr>
+                <tr class="row-note">
+                  <td>Method</td>
+                  <td>Luminance + Saturation scoring</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="coverage-row">
+              <span class="coverage-label">Coverage</span>
+              <div class="coverage-track">
+                <div class="coverage-fill" id="coverage-bar-fill"></div>
               </div>
-              <div class="metric-card">
-                <div class="metric-icon"><i class="fas fa-bullseye"></i></div>
-                <div>
-                  <div class="metric-value" id="metric-confidence">—</div>
-                  <div class="metric-label">Confidence</div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon"><i class="fas fa-th-large"></i></div>
-                <div>
-                  <div class="metric-value" id="metric-regions">—</div>
-                  <div class="metric-label">Ink Regions</div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon"><i class="fas fa-tachometer-alt"></i></div>
-                <div>
-                  <div class="metric-value" id="metric-latency">—</div>
-                  <div class="metric-label">Latency</div>
-                </div>
-              </div>
+              <span class="coverage-pct" id="coverage-pct-label">0%</span>
             </div>
 
-            <!-- Coverage Bar -->
-            <div class="coverage-section">
-              <div class="coverage-header">
-                <span>Ink Distribution</span>
-                <span id="coverage-pct-label">0%</span>
-              </div>
-              <div class="coverage-bar-wrap">
-                <div class="coverage-bar-fill" id="coverage-bar-fill"></div>
-              </div>
-            </div>
+            <p class="ink-summary" id="ink-summary"></p>
 
-            <!-- Ink Summary -->
-            <div class="ink-summary-box">
-              <i class="fas fa-info-circle"></i>
-              <p id="ink-summary">Run analysis to see detailed ink report.</p>
-            </div>
-
-            <!-- Download -->
-            <button class="btn-primary btn-full" id="download-btn">
-              <i class="fas fa-download"></i> Download Ink Mask
-            </button>
+            <button class="btn-primary btn-sm" id="download-btn">&#8595; Download Ink Mask</button>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Features -->
-  <section class="features-section" id="features">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Capabilities</span>
-        <h2>Built for Precision</h2>
-        <p>What the preview and the offline pipeline each provide.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
-          <h3>Spatial Ink Mapping</h3>
-          <p>Pixel-level heatmaps show exactly where ink is concentrated across your image, from broad strokes to fine
-            details.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-percentage"></i></div>
-          <h3>Quantitative Coverage</h3>
-          <p>Get precise ink-to-substrate coverage ratios with statistical confidence intervals, suitable for QA
-            reporting.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-wave-square"></i></div>
-          <h3>Noise Resilience</h3>
-          <p>Advanced morphological denoising filters scan artifacts, paper texture, and substrate variation from
-            results.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-          <h3>Client-Side Speed</h3>
-          <p>Runs entirely in your browser, so nothing is uploaded; latency depends on your device and image size.
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
-          <h3>Volumetric Model (offline)</h3>
-          <p>The Python pipeline trains a 3D-CNN + Transformer on stacks of CT surface slices to segment ink that is not visible in any single slice.
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-file-export"></i></div>
-          <h3>Exportable Reports</h3>
-          <p>Download full analysis masks, CSV data exports, and PDF reports ready for auditing and documentation.</p>
-        </div>
+      <div class="analyzer-disclaimer">
+        <strong>Important:</strong> this preview uses a pixel heuristic (not the trained 3D-CNN + Transformer).
+        For real segmentation results, run <code>python train.py</code> and <code>python evaluation.py</code> 
+        from the <a href="https://github.com/ankushsingh003/InkSense" target="_blank">repository</a>.
       </div>
     </div>
   </section>
@@ -314,41 +372,21 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-inner">
-      <div class="footer-brand">
-        <div class="nav-brand">
-          <div class="brand-icon small">
-            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 4C18 4 8 14.5 8 22C8 27.5 12.5 32 18 32s10-4.5 10-10C28 14.5 18 4 18 4Z"
-                fill="url(#inkGrad2)" />
-              <defs>
-                <linearGradient id="inkGrad2" x1="8" y1="4" x2="28" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#818cf8" />
-                  <stop offset="1" stop-color="#6366f1" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <span>Ink<strong>Sense</strong></span>
-        </div>
-        <p>Open-source research project on ink segmentation in high-resolution CT volumes.</p>
+      <div>
+        <span class="brand-mono">InkSense</span>
+        <p>Open-source research &mdash; ink segmentation in high-resolution CT volumes.<br />
+        Vesuvius Challenge ink-detection task &middot; PyTorch &middot; 3D-CNN + Transformer</p>
       </div>
       <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#analyzer">Analyzer</a>
-          <a href="#features">Features</a>
-          <a href="#how-it-works">How it Works</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="#">About</a>
-          <a href="#">Research</a>
-          <a href="#">Contact</a>
-        </div>
+        <a href="https://github.com/ankushsingh003/InkSense" target="_blank">GitHub Repository</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#analyzer">Demo</a>
+        <a href="#about">About</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 InkSense Analytics. All rights reserved.</p>
+      <span>&copy; 2025 InkSense &mdash; Ankush Kumar Singh</span>
+      <span>Not for medical use &middot; Research only</span>
     </div>
   </footer>
 
