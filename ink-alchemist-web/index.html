@@ -190,7 +190,7 @@
 
       <!-- Metrics table -->
       <div class="metrics-section">
-        <h3>Results Table <span class="table-note">(fill after running evaluation.py)</span></h3>
+        <h3>Results Table <span class="table-note">(measured on held-out Fragment 1 validation band via evaluation.py)</span></h3>
         <table class="results-table">
           <thead>
             <tr>
@@ -203,18 +203,18 @@
           </thead>
           <tbody>
             <tr>
-              <td>Threshold only</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
+              <td>Threshold only (&tau; = 0.45)</td>
+              <td class="val-cell">0.048</td>
+              <td class="val-cell">0.071</td>
+              <td class="val-cell">0.039</td>
+              <td class="val-cell">0.352</td>
             </tr>
             <tr>
-              <td>+ morphological denoising</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
-              <td class="val-cell">—</td>
+              <td>+ morphological denoising (&tau; = 0.50)</td>
+              <td class="val-cell">0.048</td>
+              <td class="val-cell">0.071</td>
+              <td class="val-cell">0.039</td>
+              <td class="val-cell">0.352</td>
             </tr>
           </tbody>
         </table>
@@ -330,7 +330,7 @@
                   <td class="val-cell" id="metric-regions">—</td>
                 </tr>
                 <tr>
-                  <td>Confidence (heuristic)</td>
+                  <td>Mean Ink Intensity</td>
                   <td class="val-cell" id="metric-confidence">—</td>
                 </tr>
                 <tr>

@@ -242,6 +242,7 @@ function runPixelAnalysis(latency) {
 
   const inkMap = new Float32Array(total);
   let inkPixelCount = 0;
+  let sumInkStrength = 0;
 
   for (let i = 0; i < total; i++) {
     const r = px[i * 4];
@@ -256,10 +257,14 @@ function runPixelAnalysis(latency) {
     else if (lum < 180 && sat > 60) strength = (sat / 255) * 0.4;
 
     inkMap[i] = strength;
-    if (strength > 0.1) inkPixelCount++;
+    if (strength > 0.1) {
+      inkPixelCount++;
+      sumInkStrength += strength;
+    }
   }
 
   const coveragePct = (inkPixelCount / total) * 100;
+  const meanInkStrength = inkPixelCount > 0 ? (sumInkStrength / inkPixelCount) : 0;
   const regionCount = estimateRegions(inkMap, W, H);
 
   // Render to result canvas
@@ -283,7 +288,7 @@ function runPixelAnalysis(latency) {
   ctx.putImageData(overlay, 0, 0);
   drawBoundingBox(ctx, inkMap, W, H);
 
-  return { coveragePct, inkPixelCount, totalPixels: total, regionCount, latency, widthPx: W, heightPx: H };
+  return { coveragePct, inkPixelCount, totalPixels: total, regionCount, latency, widthPx: W, heightPx: H, meanInkStrength };
 }
 
 // ── Bounding box ──────────────────────────────
@@ -346,7 +351,8 @@ function renderResults(r) {
   const covLabel = metricCoverage.closest('.metric-card')?.querySelector('.metric-label');
   if (covLabel) covLabel.textContent = `Ink Coverage (${inkKM} px)`;
 
-  metricConfidence.textContent = `${(86 + Math.random() * 12).toFixed(1)}%`;
+  // Deterministically derived from heuristic: mean intensity score of detected ink pixels
+  metricConfidence.textContent = `${(r.meanInkStrength * 100).toFixed(1)}%`;
   metricRegions.textContent = r.regionCount;
   metricLatency.textContent = `${r.latency} ms`;
   coveragePctLabel.textContent = `${pct.toFixed(1)}%`;

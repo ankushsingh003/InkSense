@@ -10,6 +10,17 @@
 
 Because carbonised ink shares near-identical X-ray attenuation with the carbonised papyrus substrate, ink is effectively undetectable in any isolated 2D slice. InkSense resolves this by treating the papyrus surface as a 3D volumetric slab ($Z=32$ slices), fusing local 3D structural cues with long-range self-attention before projecting to high-resolution 2D surface probability maps.
 
+## Benchmark Results (Held-Out Region, Fragment 1)
+
+Evaluated via `evaluation.py` on the held-out spatial band of Fragment 1 (strict **zero pixel overlap** with training tiles):
+
+| Setting | F0.5 &uarr; | Dice &uarr; | Precision &uarr; | Recall &uarr; | Optimal $\tau$ |
+|---|---|---|---|---|---|
+| **Threshold only** | **0.048** | **0.071** | **0.039** | **0.352** | $\tau = 0.45$ |
+| **+ Morphological Denoising** | **0.048** | **0.071** | **0.039** | **0.352** | $\tau = 0.50$ |
+
+> Checkpoint trained via `train.py` and saved to `checkpoints/best.pt`. Evaluated metrics exported to `results/metrics.json`. The 4-panel diagnostic figure (IR scan, ground truth, predicted probability map, and TP/FP/FN error overlay) is generated via `visualize_impact.py` and saved at `results/held_out_result.png`.
+
 ---
 
 ## Architecture Diagram
@@ -70,7 +81,7 @@ graph TB
 flowchart TD
     subgraph Offline_Preprocessing ["1. Data Ingestion & Preprocessing"]
         RAW["Raw 16-bit TIFF Slices<br/>(1.7 GB per fragment)"]
-        SCALE["Linear Scale & Quantize<br/>[p1, p99] to uint8"]
+        SCALE["Linear Bit-Depth Scaling<br/>img // 257 (16-bit to uint8)"]
         MMAP["Memory-Mapped Storage<br/>(fragment_volume.npy)"]
         RAW --> SCALE --> MMAP
     end
@@ -116,8 +127,8 @@ d:\inkSence\
 ```
 
 ### 1. Ingestion & Memory-Mapped Storage (`data_preprocessing.py`)
-- Reads stacked 16-bit micro-CT TIFF slices slice-by-slice to maintain a flat RAM footprint $< 500\text{ MB}$.
-- Performs robust 1st/99th percentile contrast normalization and quantizes intensity to `uint8`.
+- Streams stacked 16-bit micro-CT TIFF slices slice-by-slice into disk, keeping memory consumption bounded by a single slice rather than buffering the full 3D volume.
+- Performs linear bit-depth downscaling (`img // 257`) to convert 16-bit TIFF slices into `uint8` without silent wrap-around.
 - Persists data via `np.lib.format.open_memmap`, enabling parallel workers to slice 3D sub-volumes with zero file copy overhead.
 
 ### 2. Leakage-Free Spatial Holdout Engine (`inksense_utils.py`)
@@ -193,6 +204,24 @@ pip install -r requirements.txt
 Run the 14-point test suite to verify token downsampling constraints, coordinate boundaries, and gradient flow:
 ```bash
 pytest -v
+```
+```
+tests/test_core.py::test_model_output_shape PASSED                       [  7%]
+tests/test_core.py::test_attention_token_count PASSED                    [ 14%]
+tests/test_core.py::test_gradient_flows_through_backbone PASSED          [ 21%]
+tests/test_core.py::test_skip_connection_preserves_shape PASSED          [ 28%]
+tests/test_core.py::test_dice_loss_bounds PASSED                         [ 35%]
+tests/test_utils.py::test_to_uint8_converts_16bit_to_8bit PASSED          [ 42%]
+tests/test_utils.py::test_to_uint8_noop_on_8bit PASSED                   [ 50%]
+tests/test_utils.py::test_val_region_start_boundary PASSED               [ 57%]
+tests/test_utils.py::test_tile_origins_fit_inside_bounds PASSED          [ 64%]
+tests/test_utils.py::test_tile_origins_covers_boundary PASSED             [ 71%]
+tests/test_utils.py::test_spatial_split_no_overlap PASSED                [ 78%]
+tests/test_utils.py::test_metrics_zero_and_perfect PASSED                [ 85%]
+tests/test_utils.py::test_f05_penalizes_false_positives PASSED           [ 92%]
+tests/test_utils.py::test_morphology_removes_isolated_noise PASSED       [100%]
+
+============================= 14 passed in 11.46s =============================
 ```
 
 ### 3. Data Download & Preprocessing

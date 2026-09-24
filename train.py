@@ -127,6 +127,9 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out_dir", default="checkpoints")
     ap.add_argument("--no_wandb", action="store_true")
+    ap.add_argument("--num_workers", type=int, default=0)
+    ap.add_argument("--max_train_tiles", type=int, default=None, help="Cap training tiles for fast runs / testing")
+    ap.add_argument("--max_val_tiles", type=int, default=None, help="Cap validation tiles for fast runs / testing")
     args = ap.parse_args()
 
     seed_everything(args.seed)
@@ -146,8 +149,13 @@ def main():
         val_sets.append(VesuviusDataset(v, l, m, args.tile_size, args.tile_size, "all"))
 
     train_ds, val_ds = ConcatDataset(train_sets), ConcatDataset(val_sets)
-    train_loader = DataLoader(train_ds, args.batch_size, shuffle=True, num_workers=2, pin_memory=device.type == "cuda")
-    val_loader = DataLoader(val_ds, args.batch_size, shuffle=False, num_workers=2)
+    if args.max_train_tiles and len(train_ds) > args.max_train_tiles:
+        train_ds = torch.utils.data.Subset(train_ds, list(range(args.max_train_tiles)))
+    if args.max_val_tiles and len(val_ds) > args.max_val_tiles:
+        val_ds = torch.utils.data.Subset(val_ds, list(range(args.max_val_tiles)))
+
+    train_loader = DataLoader(train_ds, args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=device.type == "cuda")
+    val_loader = DataLoader(val_ds, args.batch_size, shuffle=False, num_workers=args.num_workers)
     print(f"device={device} | train tiles={len(train_ds)} | val tiles={len(val_ds)}")
 
     model = VesuviusModel(z_dim=train_sets[0].volume.shape[0]).to(device)

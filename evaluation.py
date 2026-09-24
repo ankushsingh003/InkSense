@@ -82,13 +82,17 @@ def main():
     ap.add_argument("--stride", type=int, default=128)
     ap.add_argument("--threshold", type=float, default=None, help="Fixed threshold; skips the sweep")
     ap.add_argument("--out_dir", default="results")
+    ap.add_argument("--crop_h", type=int, default=None, help="Optional max height for evaluation window")
+    ap.add_argument("--crop_w", type=int, default=None, help="Optional max width for evaluation window")
     a = ap.parse_args()
 
     p = lambda k: os.path.join(a.data_dir, f"fragment{a.fragment}_{k}.npy")
     volume, labels, mask = (np.load(p(k), mmap_mode="r") for k in ("volume", "labels", "mask"))
     h, w = mask.shape
     y0 = val_region_start(h, a.val_frac) if a.region == "val" else 0
-    region = (y0, h, 0, w)
+    y1 = min(h, y0 + a.crop_h) if a.crop_h else h
+    x1 = min(w, a.crop_w) if a.crop_w else w
+    region = (y0, y1, 0, x1)
 
     predict_fn = make_torch_predict_fn(a.checkpoint, z_dim=volume.shape[0])
     res = evaluate(predict_fn, volume, labels, mask, region, a.tile_size, a.stride, a.threshold)
