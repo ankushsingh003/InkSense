@@ -1,4 +1,0 @@
-ANNOT_COLUMNS: ['id', 'image_id', 'bbox', 'utf8_string', 'points', 'area']
-ANNOT_SAMPLE: {'id': 'a4ea732cd3d5948a_1', 'image_id': 'a4ea732cd3d5948a', 'bbox': array([525.83,   3.4 , 197.64,  33.94]), 'utf8_string': 'Performance', 'points': array([525.83,   3.4 , 723.47,   7.29, 722.76,  36.99, 525.83,  37.34]), 'area': 6707.9}
-IMG_COLUMNS: ['id', 'width', 'height', 'set', 'file_name']
-IMG_SAMPLE: {'id': 'a4ea732cd3d5948a', 'width': 840, 'height': 1024, 'set': 'train', 'file_name': 'train/a4ea732cd3d5948a.jpg'}

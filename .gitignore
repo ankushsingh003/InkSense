@@ -1,81 +1,30 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual Environment
-venv/
-env/
-ENV/
-.venv
-
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb_checkpoints
-
-# PyTorch Models & Checkpoints
-*.pth
-*.pt
-*.ckpt
-models/*.pth
-models/*.pt
-
-# Data Files (too large for git)
-*.csv
-*.parquet
-*.json
+# Data & volumes
 data/
-7GB_IMAGE_TO_TEXT_DATASET/
-*.jpg
-*.jpeg
+train/
+processed/
+*.zip
+*.tif
+*.npy
 *.png
-*.webp
+!image_for_eval/*.png
+!results/*.png
 
-# Logs
-*.log
-logs/
-runs/
-tensorboard/
+# Scripts & config
+.kaggle/
+kaggle.json
+checkpoints/*.pt
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Experiment tracking
+wandb/
 
-# OS
+# System & OS
+__pycache__/
+.pytest_cache/
 .DS_Store
 Thumbs.db
-desktop.ini
+node_modules/
+ink-alchemist-web/dist/
 
-# Environment variables
-.env
-.env.local
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Temporary files
-tmp/
-temp/
-*.tmp
+# Temporary
+*.log
+/tmp/

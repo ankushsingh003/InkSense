@@ -1,8 +1,0 @@
-
-django==4.2.5
-torch==2.0.1
-torchvision==0.15.2
-transformers==4.33.0
-pillow==10.0.0
-numpy==1.24.3
-requests==2.31.0
